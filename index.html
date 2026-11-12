@@ -758,6 +758,42 @@
                     </select>
                   </div>
                   <div class="f-field">
+                    <label for="lTitulacion">Estado de titulación <span class="req">*</span></label>
+                    <select id="lTitulacion" name="lTitulacion">
+                      <option value="Título inscrito en el Registro Público">Título inscrito en el Registro Público</option>
+                      <option value="En trámite de titulación">En trámite de titulación</option>
+                      <option value="Derecho posesorio sin título">Derecho posesorio sin título</option>
+                    </select>
+                  </div>
+                  <div class="f-field">
+                    <label for="lLotificacion">Lotificación y segregación <span class="req">*</span></label>
+                    <select id="lLotificacion" name="lLotificacion">
+                      <option value="Finca independiente ya segregada">Finca independiente ya segregada</option>
+                      <option value="Lote dentro de una finca madre (aún sin segregar)">Lote dentro de una finca madre (aún sin segregar)</option>
+                      <option value="Terreno lotificado (proyecto de lotes aprobado)">Terreno lotificado (proyecto de lotes aprobado)</option>
+                    </select>
+                  </div>
+                  <div class="f-field cond" id="fincaMadreWrap">
+                    <label for="lFincaMadre">Número de finca madre <span class="req">*</span></label>
+                    <input id="lFincaMadre" name="lFincaMadre" type="text" placeholder="N.º de la finca madre en el Registro Público" />
+                  </div>
+                  <div class="f-field">
+                    <label for="lPlano">Plano catastral <span class="req">*</span></label>
+                    <select id="lPlano" name="lPlano">
+                      <option value="Aprobado por ANATI">Aprobado por ANATI</option>
+                      <option value="En trámite">En trámite</option>
+                      <option value="No tiene">No tiene</option>
+                    </select>
+                  </div>
+                  <div class="f-field">
+                    <label for="lAcceso">Acceso <span class="req">*</span></label>
+                    <select id="lAcceso" name="lAcceso">
+                      <option value="Calle pública">Calle pública</option>
+                      <option value="Servidumbre de paso">Servidumbre de paso</option>
+                      <option value="Sin acceso directo">Sin acceso directo</option>
+                    </select>
+                  </div>
+                  <div class="f-field">
                     <label for="lHipoteca">Situación de hipoteca <span class="req">*</span></label>
                     <select id="lHipoteca" name="lHipoteca">
                       <option value="Libre de hipotecas y gravámenes">Libre de hipotecas y gravámenes</option>
@@ -1065,6 +1101,14 @@
         esSociedad.addEventListener('change', updateSociedad);
         updateSociedad();
 
+        var lotificacion = $('lLotificacion');
+        function updateLotificacion() {
+          var enMadre = lotificacion.value.indexOf('finca madre') !== -1;
+          toggle($('fincaMadreWrap'), enMadre);
+        }
+        lotificacion.addEventListener('change', updateLotificacion);
+        updateLotificacion();
+
         var hipoteca = $('lHipoteca');
         function updateHipoteca() {
           var con = hipoteca.value === 'Tiene hipoteca';
@@ -1100,6 +1144,7 @@
           if (!val('pCorregimiento')) errores.push('el corregimiento');
           if (!val('pDireccion')) errores.push('la dirección');
           if (!val('lFinca')) errores.push('el número de finca / folio real (o «Sin finca inscrita»)');
+          if (lotificacion.value.indexOf('finca madre') !== -1 && !val('lFincaMadre')) errores.push('el número de finca madre');
           if (hipoteca.value === 'Tiene hipoteca' && !val('lBanco')) errores.push('el banco de la hipoteca');
           if (!val('cAreaLote')) errores.push('el área del lote');
           var canales = checkedValues('pCanales');
@@ -1152,6 +1197,11 @@
           partes.push(seccion('*3. DATOS LEGALES Y REGISTRALES*', [
             linea('N.º de finca / folio real', val('lFinca')),
             linea('Tenencia', val('lTenencia')),
+            linea('Estado de titulación', val('lTitulacion')),
+            linea('Lotificación y segregación', val('lLotificacion')),
+            lotificacion.value.indexOf('finca madre') !== -1 ? linea('N.º de finca madre', val('lFincaMadre')) : null,
+            linea('Plano catastral', val('lPlano')),
+            linea('Acceso', val('lAcceso')),
             linea('Hipoteca', val('lHipoteca')),
             hipoteca.value === 'Tiene hipoteca' ? linea('Banco de la hipoteca', val('lBanco')) : null,
             hipoteca.value === 'Tiene hipoteca' ? linea('Carta de saldo', val('lCartaSaldo')) : null,
