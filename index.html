@@ -539,6 +539,14 @@
               <legend>Qué buscas</legend>
               <div class="form-grid">
                 <div class="f-field">
+                  <label for="bIntencion">¿Qué quieres hacer? <span class="req">*</span></label>
+                  <select id="bIntencion" name="bIntencion">
+                    <option value="Quiero comprar">Quiero comprar</option>
+                    <option value="Quiero ver las opciones primero">Quiero ver las opciones primero</option>
+                    <option value="Quiero agendar una visita para verla">Quiero agendar una visita para verla</option>
+                  </select>
+                </div>
+                <div class="f-field">
                   <label for="bTipo">Tipo de propiedad <span class="req">*</span></label>
                   <select id="bTipo" name="bTipo">
                     <option value="Terreno o lote">Terreno o lote</option>
@@ -1359,13 +1367,14 @@
             return limpias.length ? titulo + '\n' + limpias.join('\n') : '';
           }
           var partesB = [];
-          partesB.push('Hola, quiero COMPRAR una propiedad. Me registro como comprador en Terrenos y Fincas:');
+          partesB.push('Hola, me registro en Terrenos y Fincas. Esto es lo que busco:');
           partesB.push(seccionB('*MIS DATOS*', [
             lineaB('Nombre completo', val('bNombre')),
             lineaB('WhatsApp', val('bTel')),
             lineaB('Correo', val('bCorreo'))
           ]));
           partesB.push(seccionB('*LO QUE BUSCO*', [
+            lineaB('Quiero', val('bIntencion')),
             lineaB('Tipo de propiedad', val('bTipo')),
             lineaB('Provincia / zona', val('bZona')),
             lineaB('Presupuesto', val('bPresupuesto')),
